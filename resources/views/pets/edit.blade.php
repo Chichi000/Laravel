@@ -22,7 +22,7 @@
                 </div>
 
                 <div>
-                    <label for="sex" class="text-lg">Sex</label>
+                    <label for="sex" class="text-lg">Gender</label>
                     {{ Form::text('sex',null,array('class'=>'block shadow-5xl p-2 my-2 w-full','id'=>'sex')) }}
                     @if($errors->has('sex'))
                     <p class="text-center text-red-500">{{ $errors->first('sex') }}</p>
@@ -30,15 +30,7 @@
                 </div>
 
                 <div>
-                    <label for="kind" class="text-lg">Kind</label>
-                    {{ Form::text('kind',null,array('class'=>'block shadow-5xl p-2 my-2 w-full','id'=>'kind')) }}
-                    @if($errors->has('kind'))
-                    <p class="text-center text-red-500">{{ $errors->first('kind') }}</p>
-                    @endif
-                </div>
-
-                <div>
-                    <label for="pictures" class="block text-lg pb-3">Animal Pic</label>
+                    <label for="pictures" class="block text-lg pb-3">Pet Picture</label>
                     {{ Form::file('pictures',null,array('class'=>'block shadow-5xl p-2 my-2 w-full','id'=>'pictures')) }}
                     <img src="{{ asset('pictures/pets/'.$pets->pictures)}}" alt="I am A Pic" width="100" height="100"
                         class="ml-24 py-2">
@@ -48,12 +40,22 @@
                 </div>
 
                 <div>
-                    <label for="customer_id" class="text-lg">Type</label>
+                    <label for="customer_id" class="text-lg">Owner</label>
                     {!! Form::select('customer_id',$customers, $pets->customer_id,['class' => 'block shadow-5xl p-2
                     my-2
                     w-full']) !!}
                     @if($errors->has('customer_id'))
                     <p class="text-center text-red-500">{{ $errors->first('customer_id') }}</p>
+                    @endif
+                </div>
+
+                <div>
+                    <label for="kind_id" class="text-lg">Owner</label>
+                    {!! Form::select('kind_id',$kind, $pets->kind_id,['class' => 'block shadow-5xl p-2
+                    my-2
+                    w-full']) !!}
+                    @if($errors->has('kind_id'))
+                    <p class="text-center text-red-500">{{ $errors->first('kind_id') }}</p>
                     @endif
                 </div>
 

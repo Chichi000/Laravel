@@ -17,7 +17,7 @@ return new class extends Migration
             $table->increments("id");
             $table->string(column: "full_name");
             $table->string(column: "cell_number");
-            $table->string(column: "pictures");
+            $table->string(column: "pictures")->default('picture.jpg');
             $table->timestamps();
             $table->softDeletes();
         });

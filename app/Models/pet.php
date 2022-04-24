@@ -9,9 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class pet extends Model
 {
     public const Validation = [
-        "pet_name" => ["required", "min:5"],
-        "sex" => ["required", "min:9"],
-        "kind" => ["required", "min:9"],
+        "pet_name" => ["required", "min:1"],
+        "sex" => ["required", "min:1"],
         "pictures" => ["required", "image", "mimes:jpg,png,jpeg,gif", "max:5048"],
     ];
 

@@ -23,7 +23,7 @@
                     </div>
 
                     <div>
-                        <label for="sex" class="text-lg">Sex</label>
+                        <label for="sex" class="text-lg">Gender</label>
                         <input type="text" class="block shadow-5xl p-2 my-2 w-full" id="sex" name="sex"
                             placeholder="Sex" value="{{old('sex')}}">
                         @if($errors->has('sex'))
@@ -32,7 +32,7 @@
                     </div>
 
                     <div>
-                        <label for="kind" class="text-lg">kind</label>
+                        <label for="kind" class="text-lg">Breed</label>
                         <input kind="text" class="block shadow-5xl p-2 my-2 w-full" id="kind" name="kind"
                             placeholder="Kind" value="{{old('kind')}}">
                         @if($errors->has('kind'))
@@ -49,10 +49,17 @@
                         @endif
                     </div>
 
-                    <label for="customer_id" class="text-lg">Customer</label>
+                    <label for="customer_id" class="text-lg">Owner</label>
                     <select name="customer_id" id="customer_id" class="block shadow-5xl p-2 w-full">
                         @foreach ($customers as $id => $customer)
                         <option value="{{ $id }}">{{ $customer }}</option>
+                        @endforeach
+                    </select>
+
+                    <label for="kind_id" class="text-lg">kind</label>
+                    <select name="kind_id" id="kind_id" class="block shadow-5xl p-2 w-full">
+                        @foreach ($kind as $id => $kind)
+                        <option value="{{ $id }}">{{ $kind }}</option>
                         @endforeach
                     </select>
 

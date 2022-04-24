@@ -17,40 +17,57 @@
 <div class="py-3">
   <table class="table-auto text-center">
     <tr class="text-white">
-      <th class="w-screen text-3xl">Id</th>
+      <th class="w-screen text-3xl">Customer Id</th>
       <th class="w-screen text-3xl">Full Name</th>
       <th class="w-screen text-3xl">Cell Number</th>
       <th class="w-screen text-3xl">Customer Pic</th>
       <th class="w-screen text-3xl">Pet</th>
-      <th class="w-screen text-3xl">Actions</th>
+
     </tr>
 
     @forelse ($customers as $customer)
 
     <tr>
+     @if($customer->deleted_at)
       <td class="text-center text-3xl">
-        <a href="{{route('cust.show',$customer->id)}}">{{$customer->id}}</a>
+          <a href="#">{{$customer->id}}</a>
       </td>
+      @else
       <td class="text-center text-3xl">
+          <a href="{{route('cust.show',$customer->id)}}">{{$customer->id}}</a>
+      </td>
+      @endif
+      </td>
+      <td >
         {{ $customer->full_name }}
       </td>
-      <td class="text-center text-3xl">
+      <td >
         {{ $customer->cell_number }}
       </td>
       <td class="pl-12">
-        <img src="{{ asset('pictures/customers/'.$customer->pictures)}}" alt="Antok na ko Diya" width="100" height="100">
+        <img src="{{ asset('pictures/customers/'.$customer->pictures)}}" alt="Pics" width="100" height="100">
       </td>
-      <td class="text-center text-3xl">
+      <td >
         {{ $customer->pet_name }}
       </td>
+      @if($customer->deleted_at)
       <td class=" text-center">
-        <a href="cust/{{ $customer->id }}/edit" class="text-center text-2xl bg-green-600 p-2">
-          Update
-        </a>
+          <a href="#">
+              <p class="text-center text-2xl bg-green-600 p-2">
+                  Update &rarr;
+              </p>
+          </a>
       </td>
+      @else
+      <td>
+          <a href="cust/{{ $customer->id }}/edit" class="text-center text-2xl bg-green-600 p-2">
+              Update &rarr;
+          </a>
+      </td>
+      @endif
       <td class=" text-center">
         {!! Form::open(array('route' => array('cust.destroy', $customer->id),'method'=>'DELETE')) !!}
-        <button type="submit" class="text-center text-2xl bg-red-600 p-2 my-2"
+        <button type="submit"
         onclick="return confirm('Do you want to delete this data on database?')">
           Delete
         </button>
@@ -60,7 +77,7 @@
       @if($customer->deleted_at)
       <td>
         <a href="{{ route('cust.restore', $customer->id) }}">
-          <p class="text-center text-red-700 text-2xl bg-purple-500 p-2 my-2"
+          <p
           onclick="return confirm('Do you want to restore this data?')">
             Restore
           </p>
@@ -69,28 +86,21 @@
       @else
       <td>
         <a href="#">
-          <p class="text-center text-2xl bg-purple-500 p-2 my-2">
+          <p >
             Restore
           </p>
         </a>
       </td>
       @endif
 
-      <td>
-        <a href="{{ route('cust.forceDelete', $customer->id) }}">
-          <p class="text-center text-2xl bg-warning p-2 ml-3 mr-4 my-2"
-            onclick="return confirm('Do you want to delete this data permanently?')">
-            Destroy
-          </p>
-        </a>
-      </td>
+
     </tr>
     @empty
-    <p>No Data in the Database</p>
+    <p>NO DATA</p>
     @endforelse
   </table>
 
-  <div class="pt-6 px-4">{{ $customers->links( )}}</div>
+  <div >{{ $customers->links( )}}</div>
 </div>
 </div>
 @endsection

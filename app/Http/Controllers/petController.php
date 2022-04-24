@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\pet;
 use App\Models\customer;
+use App\Models\kind;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\petRequest;
+use Illuminate\Support\Facades\View;
 
 class petController extends Controller
 {
@@ -24,12 +26,18 @@ class petController extends Controller
             "=",
             "pets.customer_id"
         )
+        ->join(
+            "kind",
+            "kind.id",
+            "=",
+            "pets.kind_id"
+        )
             ->select(
                 "customers.full_name",
                 "pets.id",
                 "pets.pet_name",
                 "pets.sex",
-                "pets.kind",
+                "kind.kind",
                 "pets.pictures",
                 "pets.customer_id",
                 "pets.deleted_at"
@@ -49,8 +57,10 @@ class petController extends Controller
     public function create()
     {
         $customers = Customer::pluck("full_name", "id");
+        $kind = kind::pluck("kind", "id");
         return view("pets.create", [
             "customers" => $customers,
+            "kind" => $kind,
         ]);
     }
 
@@ -65,7 +75,7 @@ class petController extends Controller
         $pets = new pet();
         $pets->pet_name = $request->input("pet_name");
         $pets->sex = $request->input("sex");
-        $pets->kind = $request->input("kind");
+        $pets->kind_id = $request->input("kind_id");
         $pets->customer_id = $request->input("customer_id");
         if ($request->hasfile("pictures")) {
             $file = $request->file("pictures");
@@ -85,12 +95,32 @@ class petController extends Controller
      */
     public function show($id)
     {
-        $pets = Pet::find($id);
-        $customers = Customer::pluck("full_name", "id");
-        return view("pets.show", [
-            "pets" => $pets,
-            "customers" => $customers,
-        ]);
+        $pets = pet::join(
+            "customers",
+            "customers.id",
+            "=",
+            "pets.customer_id"
+        )
+        ->join(
+            "kind",
+            "kind.id",
+            "=",
+            "pets.kind_id"
+        )
+            ->select(
+                "customers.full_name",
+                "pets.id",
+                "pets.pet_name",
+                "pets.sex",
+                "kind.kind",
+                "pets.pictures",
+                "pets.customer_id",
+                "pets.deleted_at"
+            )
+            ->where('pets.id', $id)
+            ->get();
+
+        return View::make('pets.show', compact('pets'));
     }
 
     /**
@@ -103,9 +133,11 @@ class petController extends Controller
     {
         $pets = Pet::find($id);
         $customers = Customer::pluck("full_name", "id");
+        $kind = kind::pluck("kind", "id");
         return view("pets.edit", [
             "pets" => $pets,
             "customers" => $customers,
+            "kind" => $kind,
         ]);
     }
 
@@ -121,7 +153,7 @@ class petController extends Controller
         $pets = pet::find($id);
         $pets->pet_name = $request->input("pet_name");
         $pets->sex = $request->input("sex");
-        $pets->kind = $request->input("kind");
+        $pets->kind_id = $request->input("kind_id");
         $pets->customer_id = $request->input("customer_id");
         if ($request->hasfile("pictures")) {
             $destination = "pictures/pets/" . $pets->pictures;

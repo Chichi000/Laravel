@@ -11,13 +11,12 @@
 <div class="py-3">
     <table class="table-auto">
         <tr class="text-white text-center">
-            <th class="w-screen text-3xl">Id</th>
+            <th class="w-screen text-3xl">Pet Id</th>
             <th class="w-screen text-3xl">Pet Name</th>
             <th class="w-screen text-3xl">Gender</th>
-            <th class="w-screen text-3xl">Kind</th>
-            <th class="w-screen text-3xl">Customer</th>
+            <th class="w-screen text-3xl">Breed</th>
+            <th class="w-screen text-3xl">Owner</th>
             <th class="w-screen text-3xl">Pet Pic</th>
-            <th class="w-screen text-3xl">Actions</th>
         </tr>
 
         @forelse ($pets as $pet)
@@ -26,7 +25,7 @@
                 <a href="{{route('pets.show',$pet->id)}}">{{$pet->id}}</a>
             </td>
             <td class=" text-center text-3xl">
-                {{ $pet->pets_name }}
+                {{ $pet->pet_name }}
             </td>
             <td class=" text-center text-3xl">
                 {{ $pet->sex }}
@@ -56,7 +55,8 @@
             @if($pet->deleted_at)
             <td>
                 <a href="{{ route('pets.restore', $pet->id) }}">
-                    <p class="text-center text-red-700 text-lg bg-purple-500 p-2">
+                    <p class="text-center text-red-700 text-lg bg-purple-500 p-2"
+                    onclick="return confirm('Do you want to restore this data?')">
                         Restore
                     </p>
                 </a>
@@ -70,17 +70,9 @@
                 </a>
             </td>
             @endif
-            <td>
-                <a href="{{ route('pets.forceDelete', $pet->id) }}">
-                    <p class="text-center text-lg bg-warning p-2 m-2"
-                        onclick="return confirm('Do you want to delete this data permanently?')">
-                        Destroy
-                    </p>
-                </a>
-            </td>
-        </tr>
+        <tr>
         @empty
-        <p>No Pets Data in the Database</p>
+        <p>NO DATA</p>
         @endforelse
     </table>
     <div class="pt-6 px-4">{{ $pets->links( )}}</div>
