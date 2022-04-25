@@ -32,15 +32,6 @@
                     </div>
 
                     <div>
-                        <label for="kind" class="text-lg">Breed</label>
-                        <input kind="text" class="block shadow-5xl p-2 my-2 w-full" id="kind" name="kind"
-                            placeholder="Kind" value="{{old('kind')}}">
-                        @if($errors->has('kind'))
-                        <p class="text-center text-red-500">{{ $errors->first('kind') }}</p>
-                        @endif
-                    </div>
-
-                    <div>
                         <label for="pictures" class="text-lg">Pet Picture</label>
                         <input type="file" class="block shadow-5xl p-2 w-full" id="pictures" name="pictures"
                             value="{{old('pictures')}}">

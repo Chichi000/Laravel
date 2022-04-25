@@ -19,8 +19,15 @@
 
         @forelse ($services as $service)
         <tr>
-            <td class=" text-center text-3xl">
+            @if($service->deleted_at)
+            <td class="text-center text-3xl">
+                <a href="#">{{$service->id}}</a>
+            </td>
+            @else
+            <td class="text-center text-3xl">
                 <a href="{{route('service.show',$service->id)}}">{{$service->id}}</a>
+            </td>
+            @endif
             </td>
             <td class=" text-center text-3xl">
                 {{ $service->service_name }}
@@ -31,15 +38,25 @@
             <td class="pl-12">
                 <img src="{{ asset('pictures/services/'.$service->images)}}" alt="I am A Pic" width="75" height="75">
             </td>
+            @if($service->deleted_at)
             <td class=" text-center">
+                <a href="#">
+                    <p class="text-center text-2xl bg-green-600 p-2">
+                        Update &rarr;
+                    </p>
+                </a>
+            </td>
+            @else
+            <td>
                 <a href="service/{{ $service->id }}/edit" class="text-center text-2xl bg-green-600 p-2">
                     Update &rarr;
                 </a>
             </td>
+            @endif
             <td class=" text-center">
                 {!! Form::open(array('route' => array('service.destroy', $service->id),'method'=>'DELETE')) !!}
                 <button type="submit" class="text-center text-2xl bg-red-600 p-2"
-                onclick="return confirm('Do you want to delete this data?')">
+                    onclick="return confirm('Do you want to delete this data?')">
                     Delete &rarr;
                 </button>
                 {!! Form::close() !!}
@@ -47,8 +64,7 @@
             @if($service->deleted_at)
             <td>
                 <a href="{{ route('service.restore', $service->id) }}">
-                    <p
-                    onclick="return confirm('Do you want to restore this data?')">
+                    <p onclick="return confirm('Do you want to restore this data?')">
                         Restore &rarr;
                     </p>
                 </a>
@@ -56,8 +72,7 @@
             @else
             <td>
                 <a href="#">
-                    <p class="text-center text-2xl bg-purple-500 py-2 mx-3"
-                    >
+                    <p class="text-center text-2xl bg-purple-500 py-2 mx-3">
                         Restore &rarr;
                     </p>
                 </a>

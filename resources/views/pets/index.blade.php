@@ -21,8 +21,15 @@
 
         @forelse ($pets as $pet)
         <tr>
-            <td class=" text-center text-3xl">
+            @if($pet->deleted_at)
+            <td class="text-center text-3xl">
+                <a href="#">{{$pet->id}}</a>
+            </td>
+            @else
+            <td class="text-center text-3xl">
                 <a href="{{route('pets.show',$pet->id)}}">{{$pet->id}}</a>
+            </td>
+            @endif
             </td>
             <td class=" text-center text-3xl">
                 {{ $pet->pet_name }}
@@ -39,15 +46,25 @@
             <td class="pl-10">
                 <img src="{{ asset('pictures/pets/'.$pet->pictures)}}" alt="skskskks" width="75" height="75">
             </td>
+            @if($pet->deleted_at)
             <td class=" text-center">
-                <a href="pets/{{ $pet->id }}/edit" class="text-center text-lg bg-green-600 p-2">
-                    Update
+                <a href="#">
+                    <p class="text-center text-2xl bg-green-600 p-2">
+                        Update &rarr;
+                    </p>
                 </a>
             </td>
+            @else
+            <td>
+                <a href="pets/{{ $pet->id }}/edit" class="text-center text-2xl bg-green-600 p-2">
+                    Update &rarr;
+                </a>
+            </td>
+            @endif
             <td class=" text-center">
                 {!! Form::open(array('route' => array('pets.destroy', $pet->id),'method'=>'DELETE')) !!}
                 <button type="submit" class="text-center text-lg bg-red-600 p-2"
-                onclick="return confirm('Do you want to delete this data on database?')">
+                    onclick="return confirm('Do you want to delete this data on database?')">
                     Delete
                 </button>
                 {!! Form::close() !!}
@@ -56,7 +73,7 @@
             <td>
                 <a href="{{ route('pets.restore', $pet->id) }}">
                     <p class="text-center text-red-700 text-lg bg-purple-500 p-2"
-                    onclick="return confirm('Do you want to restore this data?')">
+                        onclick="return confirm('Do you want to restore this data?')">
                         Restore
                     </p>
                 </a>
@@ -71,9 +88,9 @@
             </td>
             @endif
         <tr>
-        @empty
-        <p>NO DATA</p>
-        @endforelse
+            @empty
+            <p>NO DATA</p>
+            @endforelse
     </table>
     <div class="pt-6 px-4">{{ $pets->links( )}}</div>
 </div>

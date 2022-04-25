@@ -3,7 +3,7 @@
 @section('laman')
 
 <div class="pt-8 pb-4 px-8">
-    <a href="signup" >
+    <a href="signup">
         Add New Employee
     </a>
 
@@ -19,8 +19,15 @@
 
         @forelse ($employees as $employee)
         <tr>
+            @if($employee->deleted_at)
+            <td class="text-center text-3xl">
+                <a href="#">{{$employee->id}}</a>
+            </td>
+            @else
             <td class="text-center text-3xl">
                 <a href="{{route('employees.show',$employee->id)}}">{{$employee->id}}</a>
+            </td>
+            @endif
             </td>
             <td class="text-center text-3xl">
                 {{ $employee->full_name }}
@@ -31,11 +38,21 @@
             <td class="pl-10">
                 <img src="{{ asset('pictures/employees/'.$employee->pictures)}}" alt="skskskks" width="75" height="75">
             </td>
+            @if($employee->deleted_at)
             <td class=" text-center">
-                <a href="employees/{{ $employee->id }}/edit">
+                <a href="#">
+                    <p class="text-center text-2xl bg-green-600 p-2">
+                        Update &rarr;
+                    </p>
+                </a>
+            </td>
+            @else
+            <td>
+                <a href="employees/{{ $employee->id }}/edit" class="text-center text-2xl bg-green-600 p-2">
                     Update &rarr;
                 </a>
             </td>
+            @endif
             <td class=" text-center">
                 {!! Form::open(array('route' => array('employees.destroy', $employee->id),'method'=>'DELETE')) !!}
                 <button type="submit" onclick="return confirm('Do you want to delete this data on database?')">
@@ -54,16 +71,16 @@
             @else
             <td>
                 <a href="#">
-                    <p >
+                    <p>
                         Restore &rarr;
                     </p>
                 </a>
             </td>
             @endif
 
-        @empty
-        <p>NO DATA</p>
-        @endforelse
+            @empty
+            <p>NO DATA</p>
+            @endforelse
     </table>
     <div class="pt-6 px-4">{{ $employees->links()}}</div>
 </div>
