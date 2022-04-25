@@ -122,6 +122,7 @@ class transactionController extends Controller
         $request->session()->put("cart", $cart);
         Session::put("cart", $cart);
         $request->session()->save();
+        return redirect()->route("info");
     }
 
     public function getPet(Request $request, $id)
@@ -135,6 +136,7 @@ class transactionController extends Controller
         $request->session()->put("cart", $cart);
         Session::put("cart", $cart);
         $request->session()->save();
+        return redirect()->route("info");
     }
 
     public function getRemoveItem($id)
@@ -147,7 +149,6 @@ class transactionController extends Controller
         } else {
             Session::forget("cart");
         }
-        return redirect()->route("transaction.shoppingCart");
     }
 
     public function removeService($id)
@@ -225,7 +226,7 @@ class transactionController extends Controller
             ->latest("transacs.id")
             ->take("6")
             ->get();
-        return view("transaction.receipt", [
+        return view("transac.receipt", [
             "customers" => $customers,
         ]);
     }
@@ -259,7 +260,13 @@ class transactionController extends Controller
      */
     public function show($id)
     {
-        //
+        $services = DB::table('services')
+            ->rightJoin('comments', 'comments.service_id', 'services.id')
+            ->select('comments.id', 'comments.service_id', 'services.service_name', 'comments.name', 'comments.email', 'comments.comment')
+            ->where('services.id', $id)
+            ->get();
+
+        return view('transac.show', ['services' => $services]);
     }
 
     /**
@@ -270,7 +277,16 @@ class transactionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $transactions = transac::find($id);
+        $employees = employee::pluck("full_name", "id");
+        $animals = pet::pluck("pet_name", "id");
+        $services = Service::pluck("service_name", "id");
+        return view("transac.edit", [
+            "transactions" => $transactions,
+            "employees" => $employees,
+            "animals" => $animals,
+            "services" => $services,
+        ]);
     }
 
     /**
@@ -282,7 +298,14 @@ class transactionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $transactions = transac::find($id);
+        $transactions->date = $request->input("date");
+        $transactions->status = $request->input("status");
+        $transactions->employee_id = $request->input("employee_id");
+        $transactions->pets_id = $request->input("pets_id");
+        $transactions->service_id = $request->input("service_id");
+        $transactions->update();
+        return Redirect::to("transac");
     }
 
     /**
@@ -291,8 +314,10 @@ class transactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function Delete($id)
     {
-        //
+        $transactions = transac::findOrFail($id);
+        $transactions->forceDelete();
+        return Redirect::route("transac.index");
     }
 }

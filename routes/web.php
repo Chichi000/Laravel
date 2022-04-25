@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\commentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\custController;
 /*
@@ -117,38 +118,57 @@ Route::get("/results", "App\Http\Controllers\consultationController@results")
     ->name("results")
     ->middleware("auth");
 
-    Route::get("shopping-cart", [
-        "uses" => 'App\Http\Controllers\transactionController@getCart',
-        "as" => "transaction.shoppingCart",
-        "middleware" => "auth",
-    ]);
+Route::get("/result", "App\Http\Controllers\custController@result")
+    ->name("result")
+    ->middleware("auth");
 
-    Route::get("checkout", [
-        "uses" => "transactionController@postCheckout",
-        "as" => "checkout",
-    ]);
+Route::get("shopping-cart", [
+    "uses" => 'App\Http\Controllers\transactionController@getCart',
+    "as" => "transaction.shoppingCart",
+    "middleware" => "auth",
+]);
 
-    Route::get("/receipt", 'App\Http\Controllers\transactionController@getReceipt')
-        ->name("receipt")
-        ->middleware("auth");
+Route::get("checkout", [
+    "uses" => "transactionController@postCheckout",
+    "as" => "checkout",
+]);
 
-    Route::get("info", [
-        "uses" => 'App\Http\Controllers\transactionController@getInfo',
-        "as" => "info",
-        "middleware" => "auth",
-    ]);
+Route::get("/receipt", 'App\Http\Controllers\transactionController@getReceipt')
+    ->name("receipt")
+    ->middleware("auth");
 
-    Route::get("add-to-cart/{id}", [
-        "uses" => 'App\Http\Controllers\transactionController@getAddToCart',
-        "as" => "transaction.addToCart",
-    ]);
+Route::get("info", [
+    "uses" => 'App\Http\Controllers\transactionController@getInfo',
+    "as" => "info",
+    "middleware" => "auth",
+]);
 
-    Route::get("add-pet/{id}", [
-        "uses" => 'App\Http\Controllers\transactionController@getPet',
-        "as" => "transaction.addPet",
-    ]);
+Route::get("add-to-cart/{id}", [
+    "uses" => 'App\Http\Controllers\transactionController@getAddToCart',
+    "as" => "transaction.addToCart",
+]);
 
-    Route::get("remove/{id}", [
-        "uses" => 'App\Http\Controllers\transactionController@getRemoveItem',
-        "as" => "transaction.remove",
-    ]);
+Route::get("add-pet/{id}", [
+    "uses" => 'App\Http\Controllers\transactionController@getPet',
+    "as" => "transaction.addPet",
+]);
+
+Route::get("remove/{id}", [
+    "uses" => 'App\Http\Controllers\transactionController@getRemoveItem',
+    "as" => "transaction.remove",
+]);
+
+Route::get("/comment", [commentController::class, "comment"])->name("comment");
+Route::post("/send", [commentController::class, "send"])->name("comment.send");
+Route::get('comment/{id}', [
+    'uses' => 'transactionController@show',
+    'as' => 'transaction.show'
+]);
+
+Route::get('/transac', 'transactionController@index')->name("transac.index");
+Route::get('/transac/{id}/edit', 'transactionController@edit')->name('transac.edit')->middleware("auth");
+Route::post('/transac/update/{id}', ['uses' => 'transactionController@update', 'as' => 'transac.update'])->middleware("auth");
+Route::get("/transac/Delete/{id}", [
+    "uses" => "transactionController@Delete",
+    "as" => "transac.Delete",
+])->middleware("auth");

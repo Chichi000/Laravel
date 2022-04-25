@@ -12,6 +12,78 @@ use App\Models\Customer;
 class custController extends Controller
 {
 
+    public function search()
+    {
+        $customers = Customer::rightJoin(
+            "pets",
+            "pets.customer_id",
+            "=",
+            "customers.id"
+        )
+            ->rightjoin(
+                "transacs",
+                "transacs.pets_id",
+                "=",
+                "pets.id"
+            )
+            ->leftjoin(
+                "services",
+                "services.id",
+                "=",
+                "transacs.service_id"
+            )
+            ->select(
+                "customers.full_name",
+                "pets.pet_name",
+                "services.service_name",
+                "services.cost",
+                "transacs.id",
+                "customers.deleted_at"
+            )
+            ->orderBy("customers.id", "ASC")
+            ->get();
+        return view("customers.search", [
+            "customers" => $customers,
+        ]);
+    }
+
+    public function result()
+    {
+        $result = $_GET["result"];
+        $customers = Customer::rightJoin(
+            "pets",
+            "pets.customer_id",
+            "=",
+            "customers.id"
+        )
+            ->rightjoin(
+                "transacs",
+                "transacs.pets_id",
+                "=",
+                "pets.id"
+            )
+            ->leftjoin(
+                "services",
+                "services.id",
+                "=",
+                "transacs.service_id"
+            )
+            ->select(
+                "customers.full_name",
+                "pets.pet_name",
+                "services.service_name",
+                "services.cost",
+                "transacs.id",
+                "customers.deleted_at"
+            )
+
+            ->where("customers.full_name", "LIKE", "%" . $result . "%")
+            ->get();
+        return view("customers.result", [
+            "customers" => $customers,
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *

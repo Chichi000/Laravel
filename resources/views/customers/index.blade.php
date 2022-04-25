@@ -28,47 +28,46 @@
     @forelse ($customers as $customer)
 
     <tr>
-     @if($customer->deleted_at)
+      @if($customer->deleted_at)
       <td class="text-center text-3xl">
-          <a href="#">{{$customer->id}}</a>
+        <a href="#">{{$customer->id}}</a>
       </td>
       @else
       <td class="text-center text-3xl">
-          <a href="{{route('cust.show',$customer->id)}}">{{$customer->id}}</a>
+        <a href="{{route('cust.show',$customer->id)}}">{{$customer->id}}</a>
       </td>
       @endif
       </td>
-      <td >
+      <td>
         {{ $customer->full_name }}
       </td>
-      <td >
+      <td>
         {{ $customer->cell_number }}
       </td>
       <td class="pl-12">
         <img src="{{ asset('pictures/customers/'.$customer->pictures)}}" alt="Pics" width="100" height="100">
       </td>
-      <td >
+      <td>
         {{ $customer->pet_name }}
       </td>
       @if($customer->deleted_at)
       <td class=" text-center">
-          <a href="#">
-              <p class="text-center text-2xl bg-green-600 p-2">
-                  Update &rarr;
-              </p>
-          </a>
+        <a href="#">
+          <p class="text-center text-2xl bg-green-600 p-2">
+            Update &rarr;
+          </p>
+        </a>
       </td>
       @else
       <td>
-          <a href="cust/{{ $customer->id }}/edit" class="text-center text-2xl bg-green-600 p-2">
-              Update &rarr;
-          </a>
+        <a href="cust/{{ $customer->id }}/edit" class="text-center text-2xl bg-green-600 p-2">
+          Update &rarr;
+        </a>
       </td>
       @endif
       <td class=" text-center">
         {!! Form::open(array('route' => array('cust.destroy', $customer->id),'method'=>'DELETE')) !!}
-        <button type="submit"
-        onclick="return confirm('Do you want to delete this data on database?')">
+        <button type="submit" onclick="return confirm('Do you want to delete this data on database?')">
           Delete
         </button>
         {!! Form::close() !!}
@@ -77,8 +76,7 @@
       @if($customer->deleted_at)
       <td>
         <a href="{{ route('cust.restore', $customer->id) }}">
-          <p
-          onclick="return confirm('Do you want to restore this data?')">
+          <p onclick="return confirm('Do you want to restore this data?')">
             Restore
           </p>
         </a>
@@ -86,7 +84,7 @@
       @else
       <td>
         <a href="#">
-          <p >
+          <p>
             Restore
           </p>
         </a>
@@ -100,7 +98,14 @@
     @endforelse
   </table>
 
-  <div >{{ $customers->links( )}}</div>
+  <div>{{ $customers->links( )}}</div>
+  <span class="flex justify-center pt-6">
+    <form action="{{ url('result') }}" type="GET">
+      <input type="result" name="result" id="result" class="text-center pb-1 px-2 w-full">
+      <div class="grid w-full">
+        <button class="bg-green-800 text-white font-bold p-2 mt-3">Search</button>
+      </div>
+  </span>
 </div>
 </div>
 @endsection
